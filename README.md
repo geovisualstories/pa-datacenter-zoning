@@ -9,7 +9,7 @@ Cartography & analysis: Geovisual Stories
   <img alt="Map of Pennsylvania municipalities with data center zoning ordinances" src="outputs/pa_datacenter_zoning_both_dark.png">
 </picture>
 
-**WHO** — 66 Pennsylvania municipalities (cities, boroughs, townships) across 26 of 67 counties, plus 14 county-level actions
+**WHO** — Local governments in Pennsylvania deciding where data centers can be built:\n66 towns and townships in 26 of the state's 67 counties, plus 14 county governments
 
 **WHAT** — Local zoning response to data center development: adopted ordinances/overlays, moratoria, and proposed or draft amendments
 

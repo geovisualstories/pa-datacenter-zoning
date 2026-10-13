@@ -30,13 +30,25 @@ STATUS_COLORS = {
     "Proposed / Under Review": "#4fc3d9",  # cyan
 }
 
-# County-level actions (Sheet2), drawn as white outlines. Dash patterns are in
-# points (matplotlib) / pixels (Leaflet dashArray); "" = solid.
+# Plain-language legend text for each status: (label, description).
+STATUS_LEGEND = {
+    "Adopted": ("Rules adopted", "data center zoning is now law"),
+    "Moratorium": ("Temporary pause", "moratorium while rules are written or challenged"),
+    "Proposed / Under Review": ("Rules proposed", "draft, hearing, or under review"),
+}
+
+# County-level actions (Sheet2), drawn as outlines + a wash in the theme's county_ord_fill.
+# Dash patterns are in points (matplotlib) / pixels (Leaflet dashArray); "" = solid.
+# "fill" is the wash opacity (0 = none). Legend labels/notes live here too, so the
+# legend swatches and the map are drawn from the same style.
 COUNTY_STATUS_ORDER = ["Adopted", "Proposed", "Guide Published"]
 COUNTY_STATUS_STYLES = {
-    "Adopted":         {"dash": "",    "opacity": 0.9,  "width": 1.3},
-    "Proposed":        {"dash": "4 3", "opacity": 0.75, "width": 1.1},
-    "Guide Published": {"dash": "1 3", "opacity": 0.45, "width": 1.0},
+    "Adopted":         {"dash": "",    "opacity": 0.9,  "width": 1.3, "fill": 0.10,
+                        "label": "County rules adopted", "note": ""},
+    "Proposed":        {"dash": "4 3", "opacity": 0.75, "width": 1.1, "fill": 0.05,
+                        "label": "County rules proposed", "note": ""},
+    "Guide Published": {"dash": "1 3", "opacity": 0.6,  "width": 1.0, "fill": 0,
+                        "label": "County guidance only", "note": "model ordinance, not binding"},
 }
 
 # Neighboring states (STATEFP -> label), drawn as faint context outside PA.
