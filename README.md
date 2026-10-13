@@ -3,9 +3,13 @@
 ![map](outputs/pa_datacenter_zoning_both.png)
 
 **WHO** — 66 Pennsylvania municipalities (cities, boroughs, townships) across 26 of 67 counties, plus 14 county-level actions
+
 **WHAT** — Local zoning response to data center development: adopted ordinances/overlays, moratoria, and proposed or draft amendments
+
 **WHERE** — Statewide, municipal-scale; concentrations in the Harrisburg/Cumberland Valley, Lehigh Valley, Poconos, and Butler County
+
 **WHEN** — Actions dated 2025–2026 (compiled October 2026)
+
 **WHY** — Data center siting is being decided township by township. This map shows where local governments have moved first, and how unevenly.
 
 🗺️ **[Explore the interactive map →](https://geovisualstories.github.io/pa-datacenter-zoning/)**
