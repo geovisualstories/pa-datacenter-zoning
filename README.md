@@ -8,7 +8,7 @@
 **WHEN** — Actions dated 2025–2026 (compiled October 2026)
 **WHY** — Data center siting is being decided township by township. This map shows where local governments have moved first, and how unevenly.
 
-🗺️ **Interactive map:** `https://<your-username>.github.io/pa-datacenter-zoning/`
+🗺️ **Interactive map:** `https://geovisualstories.github.io/pa-datacenter-zoning/`
 
 ## Quick start
 ```bash
