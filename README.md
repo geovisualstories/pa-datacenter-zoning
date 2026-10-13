@@ -1,6 +1,7 @@
 # Zoning for the Cloud: Pennsylvania's Data Center Ordinances
 
-Principal Investigator: Valerie Holt, Teaching Associate Professor and NSF NRT Director of Operations for SEED EF, P.C. Rossin College of Engineering and Applied Science, Lehigh University<br>
+Principal Investigator: Valerie Holt, Teaching Associate Professor, Mechanical Engineering, P.C. Rossin College of Engineering and Applied Science, Lehigh University<br>
+Data Collection: Anant Raj Verma, Data Science Graduate Student<br>
 Cartography & analysis: Geovisual Stories
 
 <picture>
