@@ -1,5 +1,8 @@
 # Zoning for the Cloud: Pennsylvania's Data Center Ordinances
 
+Principal Investigator: Valerie Holt, Teaching Associate Professor and NSF NRT Director of Operations for SEED EF, P.C. Rossin College of Engineering and Applied Science, Lehigh University<br>
+Cartography & analysis: Geovisual Stories
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="outputs/pa_datacenter_zoning_both_dark.png">
   <source media="(prefers-color-scheme: light)" srcset="outputs/pa_datacenter_zoning_both_light.png">
@@ -43,6 +46,6 @@ python make_maps.py             # downloads Census boundaries on first run
 - **GIS-ready output:** `data/processed/pa_datacenter_ordinances.gpkg` opens directly in ArcGIS Pro.
 
 ## Data sources
-Ordinance status compiled from municipal codes, public hearing notices, county planning reviews, Protect Our Poconos, Protect Cumberland County, and SAVRN. Boundaries: U.S. Census Bureau.
+Ordinance research led by Valerie Holt (Principal Investigator, Lehigh University). Status compiled from municipal codes, public hearing notices, county planning reviews, Protect Our Poconos, Protect Cumberland County, and SAVRN. Boundaries: U.S. Census Bureau.
 
 *Ordinance landscape changes weekly; this is a snapshot.*

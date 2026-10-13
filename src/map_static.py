@@ -93,9 +93,9 @@ def make_static_map(state, counties, munis, polys, points, *,
              f"{len(polys)} Pennsylvania municipalities across {n_cty} of 67 counties have adopted, "
              "paused, or proposed data center zoning", color=T["subtext"], fontsize=13, ha="left")
     fig.text(0.95, 0.0,
-             "Ordinance data: compiled by author from municipal codes, public notices, county reviews & SAVRN\n"
-             f"Boundaries: U.S. Census Bureau Cartographic Boundary Files ({config.CB_YEAR})  |  "
-             "Projection: NAD83 / Pennsylvania North",
+             "Principal Investigator: Valerie Holt, Lehigh University  |  Cartography: Geovisual Stories\n"
+             "Data: municipal codes, public notices, county reviews & SAVRN  |  "
+             f"Boundaries: U.S. Census Bureau ({config.CB_YEAR})  |  NAD83 / Pennsylvania North",
              color=T["subtext"], fontsize=8, ha="right", va="top", linespacing=1.5)
 
     minx, miny, maxx, maxy = state.total_bounds

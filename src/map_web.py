@@ -69,7 +69,9 @@ def make_web_map(state, counties, polys, points, out_path=None):
              f"font-family:Helvetica,Arial,sans-serif;background:{D['panel']};padding:10px 14px;"
              "border-radius:6px'><b style='font-size:18px'>Zoning for the Cloud</b><br>"
              f"<span class='pa-sub' style='font-size:12px;color:{D['subtext']}'>Pennsylvania municipal data center "
-             f"ordinances — {len(p)} municipalities</span></div>")
+             f"ordinances — {len(p)} municipalities</span><br>"
+             f"<span class='pa-sub' style='font-size:12px;color:{D['subtext']}'>Principal Investigator: "
+             "Valerie Holt, Lehigh University</span></div>")
     m.get_root().html.add_child(folium.Element(title))
 
     c_counts = c["county_status"].value_counts() if "county_status" in c else {}

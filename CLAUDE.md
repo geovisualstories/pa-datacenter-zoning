@@ -14,6 +14,8 @@ static portfolio map (PNG/SVG) and an interactive Leaflet map on GitHub Pages.
 - `make_maps.py` — CLI entry point.
 
 ## Conventions
+- Valerie Holt (Lehigh University) is the Principal Investigator and must be credited on all
+  outputs (README, static map credits, web map title box). Cartography: Geovisual Stories.
 - Never edit the xlsx programmatically; fix data issues by hand or via `MANUAL_OVERRIDES` in join.py.
 - Dark canvas aesthetic; keep the 3 status colors consistent between static and web maps.
 - Match on county + name + municipal type (Butler County has both Butler city and Butler township).
