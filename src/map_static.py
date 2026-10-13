@@ -1,16 +1,20 @@
-"""Static, print-quality statewide map (PNG + SVG) on a dark canvas."""
+"""Static, print-quality statewide map (PNG + SVG), dark or light theme."""
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
 from . import config
 
-T = config.THEME
+
+def _mpl_dash(dash):
+    """'4 3' -> matplotlib (offset, (on, off)) tuple; '' -> solid."""
+    return (0, tuple(float(x) for x in dash.split())) if dash else "-"
 
 
 def make_static_map(state, counties, munis, polys, points, *,
                     show_counties=True, show_muni_lines=True, county_ordinances=True,
-                    style="both", label_counties=False, out_name=None, dpi=300):
-    """style: 'polygons' | 'points' | 'both'"""
+                    style="both", label_counties=False, theme="dark", out_name=None, dpi=300):
+    """style: 'polygons' | 'points' | 'both';  theme: 'dark' | 'light'"""
+    T = config.THEMES[theme]
+    colors = T["status_colors"]
     fig, ax = plt.subplots(figsize=(16, 10), facecolor=T["background"])
     ax.set_facecolor(T["background"])
     ax.set_axis_off()
@@ -23,15 +27,19 @@ def make_static_map(state, counties, munis, polys, points, *,
     if has_county_ords:
         c = counties[counties["county_status"].notna()]
         c.plot(ax=ax, color=T["county_ord_fill"], alpha=0.07, edgecolor="none", zorder=2)
-        c.boundary.plot(ax=ax, color=T["county_ord_fill"], linewidth=0.9, linestyle=(0, (2, 2)),
-                        alpha=0.55, zorder=4)
+        for cs in config.COUNTY_STATUS_ORDER:
+            sub = c[c["county_status"] == cs]
+            if len(sub):
+                st = config.COUNTY_STATUS_STYLES[cs]
+                sub.boundary.plot(ax=ax, color=T["county_ord_fill"], linewidth=st["width"],
+                                  linestyle=_mpl_dash(st["dash"]), alpha=st["opacity"], zorder=4)
 
     if show_counties:
         counties.boundary.plot(ax=ax, color=T["county_line"], linewidth=0.5, zorder=3)
     state.boundary.plot(ax=ax, color=T["state_line"], linewidth=1.1, zorder=5)
 
     for status in config.STATUS_ORDER:
-        color = config.STATUS_COLORS[status]
+        color = colors[status]
         if style in ("polygons", "both"):
             sub = polys[polys["status"] == status]
             if len(sub):
@@ -53,16 +61,29 @@ def make_static_map(state, counties, munis, polys, points, *,
     # --- legend ---
     counts = polys["status"].value_counts()
     handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9,
-                      markerfacecolor=config.STATUS_COLORS[s], markeredgecolor=T["background"],
+                      markerfacecolor=colors[s], markeredgecolor=T["background"],
                       label=f"{s}  ({counts.get(s, 0)})") for s in config.STATUS_ORDER]
-    if has_county_ords:
-        handles.append(Patch(facecolor=(1, 1, 1, 0.07), edgecolor=(1, 1, 1, 0.55),
-                             linestyle="--", label="County-level ordinance / guide"))
     leg = ax.legend(handles=handles, loc="upper left", frameon=False, fontsize=11,
                     labelcolor=T["text"], title="MUNICIPAL ORDINANCE STATUS", ncol=len(handles),
                     title_fontsize=10.5, bbox_to_anchor=(0.0, -0.01), columnspacing=2.2)
     leg.get_title().set_color(T["subtext"])
     leg._legend_box.align = "left"
+
+    if has_county_ords:
+        ax.add_artist(leg)
+        c_counts = counties["county_status"].value_counts()
+        c_handles = []
+        for cs in config.COUNTY_STATUS_ORDER:
+            st = config.COUNTY_STATUS_STYLES[cs]
+            c_handles.append(Line2D([0], [0], color=T["county_ord_fill"], alpha=st["opacity"],
+                                    linewidth=st["width"] * 1.6, linestyle=_mpl_dash(st["dash"]),
+                                    label=f"{cs}  ({c_counts.get(cs, 0)})"))
+        cleg = ax.legend(handles=c_handles, loc="upper left", frameon=False, fontsize=11,
+                         labelcolor=T["text"], title="COUNTY-LEVEL ACTION", ncol=len(c_handles),
+                         title_fontsize=10.5, bbox_to_anchor=(0.0, -0.085), columnspacing=2.2,
+                         handlelength=3)
+        cleg.get_title().set_color(T["subtext"])
+        cleg._legend_box.align = "left"
 
     # --- titles + credits ---
     n_cty = polys["county"].nunique()
@@ -84,7 +105,7 @@ def make_static_map(state, counties, munis, polys, points, *,
     ax.set_aspect("equal")
 
     config.OUTPUTS.mkdir(parents=True, exist_ok=True)
-    out_name = out_name or f"pa_datacenter_zoning_{style}{'' if show_counties else '_nocounties'}"
+    out_name = out_name or f"pa_datacenter_zoning_{style}{'' if show_counties else '_nocounties'}_{theme}"
     for ext in ("png", "svg"):
         fig.savefig(config.OUTPUTS / f"{out_name}.{ext}", dpi=dpi, facecolor=T["background"],
                     bbox_inches="tight", pad_inches=0.3)

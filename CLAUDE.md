@@ -6,7 +6,7 @@ static portfolio map (PNG/SVG) and an interactive Leaflet map on GitHub Pages.
 
 ## Layout
 - `data/PA_MUN_DataCenterOrds.xlsx` — source of truth. Sheet1 = municipalities, Sheet2 = counties.
-- `src/config.py` — paths, Census URLs, CRS (EPSG:32128), palette, dark theme.
+- `src/config.py` — paths, Census URLs, CRS (EPSG:32128), palette, DARK_THEME / LIGHT_THEME.
 - `src/clean.py` — loads sheet, collapses free-text status into 3 categories.
 - `src/boundaries.py` — downloads/caches Census cartographic boundary files.
 - `src/join.py` — matches municipalities on county + name + type; writes GeoPackage + match report.

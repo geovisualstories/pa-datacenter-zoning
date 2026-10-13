@@ -15,17 +15,18 @@ a = ap.parse_args()
 
 state, counties, munis, polys, points = join.build()
 
-if a.all_variants:
-    for style in ("polygons", "points", "both"):
-        for show in (True, False):
-            make_static_map(state, counties, munis, polys, points, style=style, show_counties=show,
-                            county_ordinances=show and not a.no_county_ordinances,
-                            label_counties=a.label_counties)
-else:
-    make_static_map(state, counties, munis, polys, points, style=a.style,
-                    show_counties=not a.no_counties,
-                    county_ordinances=not a.no_county_ordinances,
-                    label_counties=a.label_counties)
+for theme in ("dark", "light"):
+    if a.all_variants:
+        for style in ("polygons", "points", "both"):
+            for show in (True, False):
+                make_static_map(state, counties, munis, polys, points, style=style, show_counties=show,
+                                county_ordinances=show and not a.no_county_ordinances,
+                                label_counties=a.label_counties, theme=theme)
+    else:
+        make_static_map(state, counties, munis, polys, points, style=a.style,
+                        show_counties=not a.no_counties,
+                        county_ordinances=not a.no_county_ordinances,
+                        label_counties=a.label_counties, theme=theme)
 
 if not a.skip_web:
     make_web_map(state, counties, polys, points)

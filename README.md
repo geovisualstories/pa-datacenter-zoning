@@ -1,6 +1,10 @@
 # Zoning for the Cloud: Pennsylvania's Data Center Ordinances
 
-![map](outputs/pa_datacenter_zoning_both.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="outputs/pa_datacenter_zoning_both_dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="outputs/pa_datacenter_zoning_both_light.png">
+  <img alt="Map of Pennsylvania municipalities with data center zoning ordinances" src="outputs/pa_datacenter_zoning_both_dark.png">
+</picture>
 
 **WHO** — 66 Pennsylvania municipalities (cities, boroughs, townships) across 26 of 67 counties, plus 14 county-level actions
 
