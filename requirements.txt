@@ -4,3 +4,5 @@ pandas
 openpyxl
 matplotlib
 folium>=0.17
+numpy
+pillow

@@ -39,6 +39,19 @@ COUNTY_STATUS_STYLES = {
     "Guide Published": {"dash": "1 3", "opacity": 0.45, "width": 1.0},
 }
 
+# Neighboring states (STATEFP -> label), drawn as faint context outside PA.
+NEIGHBOR_STATES = {"36": "NEW YORK", "34": "NEW JERSEY", "10": "DELAWARE",
+                   "24": "MARYLAND", "54": "WEST VIRGINIA", "39": "OHIO"}
+
+# Static-map callouts: counties that make up each region (counts come from the data),
+# and where the label sits relative to the region's municipalities, in km (dx, dy).
+REGION_CALLOUTS = {
+    "Cumberland Valley": {"counties": ["Cumberland", "Franklin"], "offset": (-45, -32)},
+    "Lehigh Valley":     {"counties": ["Lehigh", "Northampton"], "offset": (-35, -30)},
+    "Poconos":           {"counties": ["Monroe", "Pike", "Carbon", "Wayne"], "offset": (42, 38)},
+    "Butler County":     {"counties": ["Butler"], "offset": (45, 30)},
+}
+
 # Point outlines use each theme's background color, so they read as a halo.
 DARK_THEME = {
     "background": "#14161a",
@@ -50,6 +63,8 @@ DARK_THEME = {
     "subtext": "#9aa0a8",
     "county_ord_fill": "#ffffff",  # wash + outline for county-level ordinances
     "panel": "rgba(20,22,26,.85)",  # web title/legend boxes
+    "neighbor_line": "#3a3f47",
+    "hillshade": 0.35,  # relief strength (0 = off)
     "status_colors": STATUS_COLORS,
 }
 
@@ -63,6 +78,8 @@ LIGHT_THEME = {
     "subtext": "#5c616a",
     "county_ord_fill": "#3d4148",
     "panel": "rgba(245,244,240,.9)",
+    "neighbor_line": "#c9c8c3",
+    "hillshade": 0.3,
     # amber darkened slightly for contrast on the light ground
     "status_colors": {**STATUS_COLORS, "Adopted": "#d9960f"},
 }

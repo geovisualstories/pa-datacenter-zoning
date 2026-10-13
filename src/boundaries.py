@@ -19,6 +19,14 @@ def load_state() -> gpd.GeoDataFrame:
     return gdf[gdf["STATEFP"] == config.PA_FIPS].to_crs(config.CRS)
 
 
+def load_neighbors() -> gpd.GeoDataFrame:
+    """States bordering PA (config.NEIGHBOR_STATES), with a 'label' column."""
+    gdf = gpd.read_file(_cached(config.STATE_URL))
+    gdf = gdf[gdf["STATEFP"].isin(config.NEIGHBOR_STATES)].copy()
+    gdf["label"] = gdf["STATEFP"].map(config.NEIGHBOR_STATES)
+    return gdf[["STATEFP", "label", "geometry"]].to_crs(config.CRS)
+
+
 def load_counties() -> gpd.GeoDataFrame:
     gdf = gpd.read_file(_cached(config.COUNTY_URL))
     gdf = gdf[gdf["STATEFP"] == config.PA_FIPS].copy()
