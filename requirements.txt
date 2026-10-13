@@ -1,0 +1,6 @@
+geopandas>=1.0
+pyogrio
+pandas
+openpyxl
+matplotlib
+folium>=0.17

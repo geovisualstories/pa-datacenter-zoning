@@ -1,0 +1,67 @@
+municipality,county,status_raw,action_date,source,status,year,base_name,muni_type,county_key,GEOID,match_note
+Adams Township,Butler,Curative-amendment moratorium / zoning rewrite,2026-07-13,SAVRN,Moratorium,2026,adams,township,butler,4201900300,exact
+Allentown,Lehigh,Adopted data-center zoning,2026-08-05,Allentown Ordinance 16232,Adopted,2026,allentown,,lehigh,4207702000,name-only
+Bensalem Township,Bucks,Curative-amendment moratorium,2026-06-08,SAVRN,Moratorium,2026,bensalem,township,bucks,4201705616,exact
+Brookville Borough,Jefferson,Moratorium,2026-01-01,SAVRN,Moratorium,2026,brookville,borough,jefferson,4206509224,exact
+Buffalo Township,Butler,Moratorium / data-center zoning review,2026,SAVRN,Moratorium,2026,buffalo,township,butler,4201910000,exact
+Butler Township,Butler,Curative-amendment moratorium,2026-05-01,SAVRN,Moratorium,2026,butler,township,butler,4201910472,exact
+Center Township,Butler,Curative-amendment moratorium,2026,SAVRN,Moratorium,2026,center,township,butler,4201912024,exact
+Cummings Township,Lycoming,Curative-amendment moratorium,2026-07-14,Cummings Township,Moratorium,2026,cummings,township,lycoming,4208117696,exact
+Dorrance Township,Luzerne,Moratorium / zoning amendment process,2025-08-01,SAVRN,Moratorium,2025,dorrance,township,luzerne,4207919616,exact
+East Whiteland Township,Chester,Curative-amendment moratorium,2026-03-01,SAVRN,Moratorium,2026,east whiteland,township,chester,4202922056,exact
+East Vincent Township,Chester,Data Center Campus ordinance drafted / under review,2025-2026,Draft ordinance,Proposed / Under Review,2025–2026,east vincent,township,chester,4202922000,exact
+Forks Township,Northampton,Adopted data-center zoning amendment,2026-06-18,Forks Township Code,Adopted,2026,forks,township,northampton,4209526728,exact
+Franklin Park Borough,Allegheny,Adopted Data Center Overlay,2026-06-17,Ordinance 697,Adopted,2026,franklin park,borough,allegheny,4200327552,exact
+Granville Township,Mifflin,Adopted data-center zoning ordinance,2026-09-28,Granville Township,Adopted,2026,granville,township,mifflin,4208730480,exact
+Gratz Borough,Dauphin,Proposed data-center zoning ordinance,2026-02 to 2026-04,Public hearing notice,Proposed / Under Review,2026,gratz,borough,dauphin,4204330600,exact
+Gregg Township,Centre,Moratorium / zoning review,2026-01-01,SAVRN,Moratorium,2026,gregg,township,centre,4202731472,exact
+Gregg Township,Union,Moratorium / zoning review,2026-08-20,SAVRN,Moratorium,2026,gregg,township,union,4211931480,exact
+Hampden Township,Cumberland,Adopted data-center zoning,2026-07-02,Municipal Code,Adopted,2026,hampden,township,cumberland,4204132296,exact
+Hazle Township,Luzerne,Curative-amendment moratorium,2026-06-01,SAVRN,Moratorium,2026,hazle,township,luzerne,4207933376,exact
+Hemlock Township,Columbia,Adopted data-center zoning amendment,2026-09-08,Hemlock Township,Adopted,2026,hemlock,township,columbia,4203733760,exact
+Jackson Township,Butler,Adopted zoning restrictions,2026,SAVRN,Adopted,2026,jackson,township,butler,4201937344,exact
+Jackson Township,Columbia,Proposed Data Center Overlay,2026-07-27,Public hearing notice,Proposed / Under Review,2026,jackson,township,columbia,4203737360,exact
+Lancaster Township,Butler,Curative-amendment process,2026-07-20,SAVRN,Proposed / Under Review,2026,lancaster,township,butler,4201941208,exact
+Lehman Township,Pike,Adopted township-wide data-center regulations,2025-11-20,Protect Our Poconos,Adopted,2025,lehman,township,pike,4210342512,exact
+Little Britain Township,Lancaster,Moratorium / zoning ordinance development,2026-01-01,SAVRN,Moratorium,2026,little britain,township,lancaster,4207143832,exact
+Londonderry Township,Dauphin,Adopted Data Center Overlay,2026-02-11,Londonderry Township Code,Adopted,2026,londonderry,township,dauphin,4204344464,exact
+Lower Allen Township,Cumberland,Proposed/reviewed data-center amendment,2026,Cumberland County review,Proposed / Under Review,2026,lower allen,township,cumberland,4204144832,exact
+Lower Mifflin Township,Cumberland,Proposed/reviewed data-center/BESS amendment,2026,Cumberland County review,Proposed / Under Review,2026,lower mifflin,township,cumberland,4204144984,exact
+Mahanoy Township,Schuylkill,Adopted data-center zoning,2026,Ordinance 2026-4,Adopted,2026,mahanoy,township,schuylkill,4210746584,exact
+Middlesex Township,Cumberland,Adopted Data Center Overlay,2025-05-30,Protect Cumberland County,Adopted,2025,middlesex,township,cumberland,4204149072,exact
+Mount Carmel Township,Northumberland,Moratorium / zoning update,2026-05-01,SAVRN,Moratorium,2026,mount carmel,township,northumberland,4209751504,exact
+Mount Pocono Borough,Monroe,Proposed data-center zoning amendment,2026-05-01,Monroe County Planning Commission,Proposed / Under Review,2026,mount pocono,borough,monroe,4208951912,exact
+Muncy Township,Lycoming,Moratorium,2026-01-01,SAVRN,Moratorium,2026,muncy,township,lycoming,4208152280,exact
+North Codorus Township,York,Proposed data-center ordinance / hearing,2026-03-03,Public hearing notice,Proposed / Under Review,2026,north codorus,township,york,4213354904,exact
+North Middleton Township,Cumberland,Adopted data-center amendment,2025-2026,PA Data Centers,Adopted,2025–2026,north middleton,township,cumberland,4204155216,exact
+Olyphant Borough,Lackawanna,Moratorium while drafting ordinance,2026-04-15,SAVRN,Moratorium,2026,olyphant,borough,lackawanna,4206956792,exact
+Palmer Township,Northampton,Adopted data-center regulations,2025-08-04,Palmer Township Code,Adopted,2025,palmer,township,northampton,4209557672,exact
+Penn Forest Township,Carbon,Adopted Data Center Overlay,2026-03-02,Penn Forest Township Code,Adopted,2026,penn forest,township,carbon,4202558968,exact
+Perkasie Borough,Bucks,Draft zoning amendment under review,2026,Council packet,Proposed / Under Review,2026,perkasie,borough,bucks,4201759384,exact
+Pocopson Township,Chester,Proposed data-center ordinance,2026-07-01,Pocopson Township,Proposed / Under Review,2026,pocopson,township,chester,4202961800,exact
+Pocono Township,Monroe,Proposed Data Center Overlay,2026-05-01,Monroe County Planning Commission,Proposed / Under Review,2026,pocono,township,monroe,4208961728,exact
+Ransom Township,Lackawanna,Proposed data-center zoning ordinance,2026-09-24,Public hearing notice,Proposed / Under Review,2026,ransom,township,lackawanna,4206963432,exact
+Salem Township,Luzerne,Curative-amendment process / temporary hold,2026-07-28,SAVRN,Proposed / Under Review,2026,salem,township,luzerne,4207967456,exact
+Sharon City,Mercer,Adopted data-center zoning ordinance,2026,Sharon City,Adopted,2026,sharon,city,mercer,4208569720,exact
+Smithfield Township,Monroe,Adopted curative amendment / H-1 district,2026-08-12,Smithfield Township,Adopted,2026,smithfield,township,monroe,4208971344,exact
+South Hanover Township,Dauphin,Draft ordinance; adoption paused,2026,South Hanover Township,Proposed / Under Review,2026,south hanover,township,dauphin,4204372200,exact
+South Middleton Township,Cumberland,Proposed data-center/BESS text amendment,2026-06-26,Cumberland County review,Proposed / Under Review,2026,south middleton,township,cumberland,4204172336,exact
+Southampton Township,Cumberland,Adopted/under-review Data Center Overlay,2025-07-28 / 2026,Cumberland County review,Adopted,2025–2026,southampton,township,cumberland,4204171904,exact
+South Whitehall Township,Lehigh,Adopted data-center/PIRT regulations,2025-08-06,South Whitehall ordinance,Adopted,2025,south whitehall,township,lehigh,4207772632,exact
+Swatara Township,Dauphin,Adopted data-center zoning,2025-04-02 / 2026-08-05,Swatara Township Code,Adopted,2025–2026,swatara,township,dauphin,4204375672,exact
+Tobyhanna Township,Monroe,Adopted Data Center Overlay,2025-12-15,Tobyhanna Township Code,Adopted,2025,tobyhanna,township,monroe,4208976960,exact
+Upper Burrell Township,Westmoreland,Moratorium / proposed ordinance,2026-05 to 2026-11,SAVRN,Moratorium,2026,upper burrell,township,westmoreland,4212978768,exact
+Upper Mount Bethel Township,Northampton,Proposed zoning amendment,2026,Upper Mount Bethel Township,Proposed / Under Review,2026,upper mount bethel,township,northampton,4209579184,exact
+Warrington Township,York,Curative-amendment process / moratorium,2026,SAVRN,Moratorium,2026,warrington,township,york,4213381056,exact
+West Hanover Township,Dauphin,Proposed data-center/BESS zoning ordinance,2026-07-23,Public hearing record,Proposed / Under Review,2026,west hanover,township,dauphin,4204383128,exact
+West Hempfield Township,Lancaster,Adopted data-center zoning,2026-09-01,SAVRN,Adopted,2026,west hempfield,township,lancaster,4207183152,exact
+West Mahanoy Township,Schuylkill,Curative-amendment moratorium,2026-09-01,SAVRN,Moratorium,2026,west mahanoy,township,schuylkill,4210783408,exact
+West Norriton Township,Montgomery,Proposed data-center ordinance,2026,Township agenda,Proposed / Under Review,2026,west norriton,township,montgomery,4209183696,exact
+West Whiteland Township,Chester,Curative-amendment moratorium,2026-05-01,SAVRN,Moratorium,2026,west whiteland,township,chester,4202984192,exact
+Woodward Township,Lycoming,Curative-amendment process,2026,SAVRN,Proposed / Under Review,2026,woodward,township,lycoming,4208186456,exact
+Birmingham Township,Chester,Proposed zoning amendment to regulate data centers,2026-09-08,Birmingham Township,Proposed / Under Review,2026,birmingham,township,chester,4202906544,exact
+Catawissa Township,Columbia,Proposed Data Center Overlay Ordinance 01-2026,2026-07-30,Catawissa Township,Proposed / Under Review,2026,catawissa,township,columbia,4203711744,exact
+Dover Township,York,Proposed zoning amendment defining/regulating data centers,2026-06-22,Dover Township,Proposed / Under Review,2026,dover,township,york,4213319704,exact
+East Manchester Township,York,Adopted standalone Data Center Ordinance 2026-3,2026-04-08,East Manchester Township Code,Adopted,2026,east manchester,township,york,4213321464,exact
+Dickinson Township,Cumberland,Zoning Amendment,,Cumberland County review,Proposed / Under Review,n/d,dickinson,township,cumberland,4204119144,exact
+North Newton Township,Cumberland,Zoning Amendment,,Cumberland County review,Proposed / Under Review,n/d,north newton,township,cumberland,4204155248,exact
