@@ -6,3 +6,4 @@ matplotlib
 folium>=0.17
 numpy
 pillow
+adjustText>=1.4

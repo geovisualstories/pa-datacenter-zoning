@@ -29,3 +29,11 @@ def county_entries(counties):
         unknown = set(status.dropna()) - set(config.COUNTY_STATUS_ORDER)
         assert not unknown, f"county statuses with no map style: {unknown}"
     return out
+
+
+def datacenter_entries(dcs):
+    """Existing data centers (context layer); empty when the Atlas isn't downloaded."""
+    if dcs is None:
+        return []
+    label, desc = config.DATACENTER_LEGEND
+    return [{"key": "datacenter", "label": label, "desc": desc, "count": len(dcs), "rows": dcs}]

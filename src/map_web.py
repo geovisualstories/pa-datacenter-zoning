@@ -3,11 +3,12 @@
 Rendered in the dark theme; a small script (THEME_JS) restyles the layers for
 light mode, driven by a sun/moon toggle, prefers-color-scheme and localStorage.
 """
+import html
 import json
 import folium
 from branca.element import MacroElement
 from jinja2 import Template
-from . import config, legend
+from . import config, insets, legend
 
 D = config.DARK_THEME
 TILES = {
@@ -16,9 +17,12 @@ TILES = {
 }
 TILE_ATTR = "Esri, HERE, Garmin, &copy; OpenStreetMap contributors"
 POLY_OPACITY, DOT_RADIUS = 0.45, 5  # shared by the map layers and the legend swatches
+DC_PX, DC_OPACITY = 8, 0.75  # existing data center diamonds (no capacity field to scale by)
+DC_CREDIT = (f"PNNL {config.DATACENTER_ATLAS['name']} {config.DATACENTER_ATLAS['version']} "
+             "(doi:" + config.DATACENTER_ATLAS["doi"] + "), &copy; OpenStreetMap contributors, ODbL")
 
 
-def make_web_map(state, counties, polys, points, out_path=None):
+def make_web_map(state, counties, polys, points, out_path=None, datacenters=None):
     s = state.to_crs(4326); c = counties.to_crs(4326)
     p = polys.to_crs(4326); pt = points.to_crs(4326)
     minx, miny, maxx, maxy = s.total_bounds
@@ -69,6 +73,24 @@ def make_web_map(state, counties, polys, points, out_path=None):
                                 tooltip=f"{r['municipality']} ({r['county']} Co.) — {status}").add_to(fg)
         status_layers.append((status, poly, fg))
 
+    # Data centers mapped in the PNNL Atlas: partial-inventory context layer, off by default. Color comes from a CSS variable
+    # that THEME_JS sets, so the diamonds follow the theme toggle.
+    dc_entries = legend.datacenter_entries(datacenters)
+    for e in dc_entries:
+        fg = folium.FeatureGroup(name=f"{e['label']} ({e['count']})", show=False).add_to(m)
+        icon_html = (f"<div class='pa-dc' style='width:{DC_PX}px;height:{DC_PX}px;"
+                     f"opacity:{DC_OPACITY};transform:rotate(45deg)'></div>")
+        for _, r in e["rows"].to_crs(4326).iterrows():
+            rows = [("Name", r["name"]), ("Operator", r["operator"]),
+                    ("Footprint", f"{r['sqft']:,.0f} sq ft" if r["sqft"] == r["sqft"] and r["sqft"] else None)]
+            body = "".join(f"<b>{k}:</b> {html.escape(str(v))}<br>" for k, v in rows
+                           if v is not None and v == v and str(v).strip())
+            popup = (f"{body or '<i>Unnamed data center</i><br>'}"
+                     f"<span style='font-size:10px;color:#777'>Source: {DC_CREDIT}</span>")
+            folium.Marker([r.geometry.y, r.geometry.x], popup=folium.Popup(popup, max_width=280),
+                          icon=folium.DivIcon(html=icon_html, icon_size=(DC_PX, DC_PX),
+                                              icon_anchor=(DC_PX // 2, DC_PX // 2))).add_to(fg)
+
     folium.LayerControl(collapsed=False).add_to(m)
     title = (f"<div class='pa-panel' style='position:fixed;top:12px;left:60px;z-index:9999;color:{D['text']};"
              f"font-family:Helvetica,Arial,sans-serif;background:{D['panel']};padding:10px 14px;"
@@ -80,12 +102,12 @@ def make_web_map(state, counties, polys, points, out_path=None):
     m.get_root().html.add_child(folium.Element(title))
 
     m.get_root().html.add_child(folium.Element(LEGEND_CSS))
-    legend_html = _legend_html(muni_entries, county_entries)
+    legend_html = _legend_html(muni_entries, county_entries, dc_entries)
     m.get_root().html.add_child(folium.Element(legend_html))
 
     # Must be added last: map children render in order, so the layers above exist when it runs.
     themes = {k: {key: t[key] for key in ("background", "county_line", "state_line", "county_ord_fill",
-                                          "text", "subtext", "panel", "status_colors")}
+                                          "text", "subtext", "panel", "status_colors", "datacenter")}
               for k, t in config.THEMES.items()}
     toggle = MacroElement()
     toggle._template = Template(THEME_JS)
@@ -95,13 +117,15 @@ def make_web_map(state, counties, polys, points, out_path=None):
         "status_layers": [(s_, poly.get_name(), fg.get_name()) for s_, poly, fg in status_layers],
         "themes": json.dumps(themes), "county_styles": json.dumps(config.COUNTY_STATUS_STYLES),
         "light_url": TILES["light"], "attr": TILE_ATTR,
+        # same extents as the static map's insets (config.INSETS)
+        "zooms": [(spec["title"], insets.bounds_4326(spec["extent"])) for spec in config.INSETS.values()],
     }
     m.add_child(toggle)
 
     out_path = out_path or (config.ROOT / "docs" / "index.html")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     m.save(out_path)
-    print(f"Saved {out_path.relative_to(config.ROOT)}")
+    print(f"Saved {out_path.name}")
 
 
 def _row(swatch, e):
@@ -114,7 +138,7 @@ def _group(title, note, rows):
             f"<span class='pa-sub pa-note'>{note}</span></div>{rows}</div>")
 
 
-def _legend_html(muni_entries, county_entries):
+def _legend_html(muni_entries, county_entries, dc_entries=()):
     """Two groups (towns & townships / county governments) in a collapsible bottom-left box.
     Swatch colors are set for the dark theme here and restyled by THEME_JS."""
     muni_rows = "".join(_row(
@@ -128,11 +152,18 @@ def _legend_html(muni_entries, county_entries):
         f"fill='{D['county_ord_fill']}' fill-opacity='{e['style']['fill']}' stroke='{D['county_ord_fill']}' "
         f"stroke-width='{e['style']['width'] * 1.2}' stroke-opacity='{e['style']['opacity']}' "
         f"stroke-dasharray='{e['style']['dash'] or 'none'}'/></svg>", e) for e in county_entries)
+    dc_rows = "".join(_row(
+        f"<svg width='30' height='18'><rect class='pa-dc-swatch' x='11' y='5' width='{DC_PX}' "
+        f"height='{DC_PX}' transform='rotate(45 15 9)' fill='{D['datacenter']}' "
+        f"fill-opacity='{DC_OPACITY}'/></svg>", e) for e in dc_entries)
+    dc_group = (_group("Data centers", "(context only)",
+                       dc_rows + "<div class='pa-sub pa-desc' style='margin-top:4px'>Off by default: "
+                       "turn on in the layer list</div>") if dc_entries else "")
     return (f"<details class='pa-panel pa-legend' open style='color:{D['text']};background:{D['panel']}'>"
             "<summary class='pa-sub'>Legend</summary><div class='pa-groups'>"
             + _group("Towns &amp; townships", "(colored shapes and dots)", muni_rows)
             + _group("County governments", "(gray shading)", county_rows)
-            + "</div></details>")
+            + dc_group + "</div></details>")
 
 
 LEGEND_CSS = """<style>
@@ -148,6 +179,9 @@ LEGEND_CSS = """<style>
 .pa-legend .pa-row {display:flex; align-items:center; gap:8px; margin-top:5px}
 .pa-legend .pa-row svg {flex:none}
 .pa-legend .pa-desc {font-size:11px; margin-top:1px}
+.pa-dc {background:var(--pa-dc, #fff)}
+.pa-zoom a {width:auto !important; padding:0 8px; font:bold 12px Helvetica,Arial,sans-serif;
+  white-space:nowrap}
 </style>"""
 
 
@@ -194,6 +228,8 @@ THEME_JS = """
     document.querySelectorAll(".pa-swatch").forEach(function (el) {
       el.setAttribute("stroke", t.county_ord_fill); el.setAttribute("fill", t.county_ord_fill);
     });
+    document.documentElement.style.setProperty("--pa-dc", t.datacenter);
+    document.querySelectorAll(".pa-dc-swatch").forEach(function (el) { el.setAttribute("fill", t.datacenter); });
     document.querySelectorAll(".pa-st-swatch, .pa-st-dot").forEach(function (el) {
       var col = t.status_colors[el.dataset.status];
       el.setAttribute("fill", col);
@@ -224,6 +260,28 @@ THEME_JS = """
     }
   });
   map.addControl(new Toggle());
+
+  // "Western PA" / "Eastern PA": zoom to the static map's inset extents.
+  var Zooms = L.Control.extend({
+    options: {position: "topleft"},
+    onAdd: function () {
+      var div = L.DomUtil.create("div", "leaflet-bar pa-zoom");
+      L.DomEvent.disableClickPropagation(div);
+      c.zooms.forEach(function (z) {
+        var a = L.DomUtil.create("a", "", div);
+        a.href = "#"; a.textContent = z[0]; a.title = "Zoom to " + z[0];
+        a.setAttribute("role", "button");
+        L.DomEvent.on(a, "click", function (e) {
+          L.DomEvent.preventDefault(e);
+          var leg = document.querySelector(".pa-legend");  // keep the extent clear of the open legend
+          var pad = leg && leg.open ? leg.offsetHeight + 20 : 0;
+          map.fitBounds(z[1], {paddingTopLeft: [0, 0], paddingBottomRight: [0, pad]});
+        });
+      });
+      return div;
+    }
+  });
+  map.addControl(new Zooms());
 
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch (err) {}

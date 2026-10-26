@@ -39,15 +39,25 @@ python make_maps.py             # downloads Census boundaries on first run
 | `--no-county-ordinances` | Hide the dashed wash for county-level ordinances |
 | `--label-counties` | Label counties with municipal activity |
 | `--all-variants` | Export every style × county-boundary combination |
+| `--no-datacenters` | Leave off the PNNL data center layer (interactive map) |
 
 ## Method
 - **Status categories:** free-text status collapsed by precedence: *Adopted* > *Moratorium* > *Proposed / Under Review* (includes drafts, curative-amendment processes, county reviews).
 - **Geometry:** U.S. Census cartographic boundary files (county subdivisions = PA municipalities), 2024.
 - **Matching:** county + municipal name + type. Results in `data/processed/match_report.csv`.
 - **Projection:** NAD83 / Pennsylvania North (EPSG:32128).
+- **Insets:** four close-ups of the most crowded clusters of ordinance municipalities: A Pittsburgh & Butler, B South-central PA, C Coal Region, D Lehigh Valley & Poconos. Municipalities within 25 km of each other form a cluster, and the four largest get an inset. The extents are hand-editable in `src/config.py` (`INSETS`); `python -m src.insets` prints suggested extents computed from the data. The interactive map has one zoom button per inset.
 - **GIS-ready output:** `data/processed/pa_datacenter_ordinances.gpkg` opens directly in ArcGIS Pro.
 
 ## Data sources
 Ordinance research led by Valerie Holt (Principal Investigator, Lehigh University). Status compiled from municipal codes, public hearing notices, county planning reviews, Protect Our Poconos, Protect Cumberland County, and SAVRN. Boundaries: U.S. Census Bureau. Relief: USGS 3D Elevation Program (~90 m, fetched on first run). Typeface: Barlow Condensed (SIL Open Font License, `fonts/OFL.txt`).
+
+**Data centers mapped in PNNL IM3 Atlas (partial inventory)**: a context layer on the interactive map only, off by default. It is built from OpenStreetMap and is incomplete: it lists 9 Pennsylvania facilities, far fewer than operate in the state, so it should not be read as a full inventory or used to compute shares.
+- **Dataset:** IM3 Open Source Data Center Atlas, Pacific Northwest National Laboratory (PNNL)
+- **Version:** v2026.02.09 (published 2026-02-09), DOI [10.57931/3017294](https://doi.org/10.57931/3017294)
+- **URL:** <https://data.msdlive.org/records/p147s-4h760>
+- **License:** [Open Database License (ODbL) 1.0](https://opendatacommons.org/licenses/odbl/1-0/). Locations are derived from OpenStreetMap, © OpenStreetMap contributors. Redistribution is allowed with attribution; the PA extract in `data/processed/pa_existing_datacenters.gpkg` and the data center points embedded in `docs/index.html` are derived databases and are likewise available under the ODbL.
+- **Setup:** MSD-LIVE serves the files from the record page (or its `msdlive` CLI), not a direct URL, so download the GeoPackage by hand into `data/raw/pnnl_datacenter_atlas/`. Without it the maps build without this layer.
+- **Caveats:** crowd-sourced, so coverage may be incomplete. There is no capacity (MW) field, so symbols are not size-scaled. Overlapping campus, building and point records are collapsed to one point per facility.
 
 *Ordinance landscape changes weekly; this is a snapshot.*
