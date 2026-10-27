@@ -5,3 +5,6 @@ data/raw/*
 !data/raw/.gitkeep
 .vscode/
 *.lock
+
+# Draft data center inventory: holds PeeringDB rows (discovery only, not redistributable)
+data/processed/pa_dc_inventory_draft.csv

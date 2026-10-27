@@ -35,6 +35,11 @@ DATACENTER_LEGEND = ("Data centers mapped in PNNL IM3 Atlas (partial inventory)"
 # Context layer only on the interactive map (off by default) for now; True adds it to the static maps.
 STATIC_DATACENTERS = False
 
+# Draft inventory of operating data centers (src/build_dc_inventory.py). The draft includes
+# PeeringDB discovery rows and is gitignored; maps may read only the public file.
+DC_INVENTORY_DRAFT = PROCESSED / "pa_dc_inventory_draft.csv"
+DC_INVENTORY_PUBLIC = PROCESSED / "pa_dc_inventory_public.csv"
+
 # NAD83 / Pennsylvania North (meters) - conformal, keeps PA "upright"
 CRS = "EPSG:32128"
 

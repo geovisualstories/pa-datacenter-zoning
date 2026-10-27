@@ -54,6 +54,27 @@ def load(state: gpd.GeoDataFrame) -> gpd.GeoDataFrame | None:
     return out
 
 
+def load_inventory_public() -> gpd.GeoDataFrame | None:
+    """The data center inventory for map layers (config.CRS points). Reads only the public file:
+    the draft holds PeeringDB rows, which may not be redistributed."""
+    if not config.DC_INVENTORY_PUBLIC.exists():
+        return None
+    df = pd.read_csv(config.DC_INVENTORY_PUBLIC, dtype=str, keep_default_na=False, encoding="utf-8-sig")
+    assert not df.apply(lambda c: c.str.contains("peeringdb", case=False)).any().any(), \
+        f"PeeringDB content in {config.DC_INVENTORY_PUBLIC.name}"
+    df = df[(df["lat"] != "") & (df["lon"] != "")]
+    pts = gpd.points_from_xy(df["lon"].astype(float), df["lat"].astype(float))
+    return gpd.GeoDataFrame(df, geometry=pts, crs=4326).to_crs(config.CRS)
+
+
+def assert_no_peeringdb(paths) -> None:
+    """Fail the build if a published output mentions PeeringDB (the draft inventory leaking in)."""
+    for p in paths:
+        if p.exists() and b"peeringdb" in p.read_bytes().lower():
+            raise RuntimeError(f"{p.relative_to(config.ROOT)} contains PeeringDB data; "
+                               "map layers must read config.DC_INVENTORY_PUBLIC only")
+
+
 def summary(dcs: gpd.GeoDataFrame, munis: gpd.GeoDataFrame, polys: gpd.GeoDataFrame) -> dict:
     """How mapped data centers line up with municipalities that have ordinances (console only;
     the Atlas is a partial inventory, so no share/percentage is derived from it)."""

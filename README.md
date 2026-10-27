@@ -60,4 +60,19 @@ Ordinance research led by Valerie Holt (Principal Investigator, Lehigh Universit
 - **Setup:** MSD-LIVE serves the files from the record page (or its `msdlive` CLI), not a direct URL, so download the GeoPackage by hand into `data/raw/pnnl_datacenter_atlas/`. Without it the maps build without this layer.
 - **Caveats:** crowd-sourced, so coverage may be incomplete. There is no capacity (MW) field, so symbols are not size-scaled. Overlapping campus, building and point records are collapsed to one point per facility.
 
+**Inventory of operating data centers** (`python -m src.build_dc_inventory`): a research worksheet, not yet a map layer. **PeeringDB is used for discovery only. Published data comes from OpenStreetMap and primary sources.** No commercial directories are used. The script writes two files:
+- `data/processed/pa_dc_inventory_draft.csv` is the working draft. It is **gitignored and never published** because it contains PeeringDB records.
+  - Every row starts as "Needs check" with `published_ok` = False.
+  - Rows from the two sources that look like the same facility (same name or operator within 500 m) are flagged in `notes`, not merged. Unnamed OpenStreetMap buildings that belong to one site are flagged the same way.
+  - Municipality and county come from the Census boundaries above.
+  - Edits made by hand (`status`, `capacity_mw`, `mw_measure`, `source_2`, `date_checked`, `published_ok`, `notes`) are kept when the script is rerun.
+- `data/processed/pa_dc_inventory_public.csv` is the published file. It holds only rows with `published_ok` = True, with every PeeringDB link and note removed.
+  - A row may be `published_ok` only if it comes from OpenStreetMap, or if it has been checked against a primary source recorded in `source_2` (operator website, PA DEP permit or news article).
+  - A PeeringDB listing on its own never qualifies. The script resets any row that breaks this rule to False.
+  - Any map layer built from the inventory must read this file only (`datacenters.load_inventory_public()`). `make_maps.py` stops with an error if `docs/index.html`, the GeoPackages or the SVG maps contain PeeringDB content.
+
+The two sources:
+- **PeeringDB** ([API](https://www.peeringdb.com/apidocs/), facilities with state = PA) lists interconnection and colocation facilities as their operators report them. It misses enterprise and hyperscale sites that don't offer interconnection. Its [Acceptable Use Policy](https://www.peeringdb.com/aup) restricts redistributing the data without PeeringDB's permission, so PeeringDB is used only to find candidate facilities, and none of its records are published.
+- **OpenStreetMap** (via the [Overpass API](https://overpass-api.de/), features tagged `telecom=data_center` or `building=data_center`) is © OpenStreetMap contributors, under the [Open Database License (ODbL) 1.0](https://opendatacommons.org/licenses/odbl/1-0/). The public inventory is a derived database and is available under the ODbL.
+
 *Ordinance landscape changes weekly; this is a snapshot.*

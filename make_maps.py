@@ -35,3 +35,7 @@ for theme in ("dark", "light"):
 
 if not a.skip_web:
     make_web_map(state, counties, polys, points, datacenters=dcs)
+
+# PeeringDB is discovery-only (its terms restrict redistribution): nothing published may contain it.
+datacenters.assert_no_peeringdb([config.ROOT / "docs" / "index.html", config.DC_INVENTORY_PUBLIC,
+                                 *config.PROCESSED.glob("*.gpkg"), *config.OUTPUTS.glob("*.svg")])
