@@ -81,6 +81,7 @@ The script works with two files:
   - Rows from the two sources that look like the same facility (same name or operator within 500 m) are flagged in `notes`, not merged. Unnamed OpenStreetMap buildings that belong to one site are flagged the same way.
   - Municipality and county come from the Census boundaries above.
   - Edits made by hand (`status`, `capacity_mw`, `mw_measure`, `source_2`, `date_checked`, `published_ok`, `notes`, or any other column) are never overwritten.
+  - `source_2` starts empty on every row and holds only a primary source you entered. A website listed by PeeringDB or OpenStreetMap goes in `notes` as a lead to check ("OSM lists website ...").
 - `data/processed/pa_dc_inventory_public.csv` is the published file. It holds only rows with `published_ok` = True, with every PeeringDB link and note removed.
   - A row may be `published_ok` only if it comes from OpenStreetMap, or if it has been checked against a primary source recorded in `source_2` (operator website, PA DEP permit or news article).
   - A PeeringDB listing on its own never qualifies. A row marked True that breaks this rule is left out of the public file and named in the output. The draft itself is not changed.

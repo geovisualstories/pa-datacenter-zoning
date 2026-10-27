@@ -149,13 +149,15 @@ def parse_overpass(payload: dict) -> pd.DataFrame:
         address = " ".join(p for p in (t.get("addr:housenumber"), t.get("addr:street")) if p)
         address = ", ".join(p for p in (address, t.get("addr:city"),
                                         f"PA {t.get('addr:postcode', '')}".strip() if address else "") if p)
+        # As with PeeringDB, a website tag is a lead, not a verification: notes, not source_2.
+        website = t.get("website") or t.get("contact:website")
         rows.append({
             "name": t.get("name") or "", "operator": t.get("operator") or "", "address": address,
             "lat": c.get("lat"), "lon": c.get("lon"),
             "type": f"OSM {e['type']} ({tag})",
             "source_1": f"https://www.openstreetmap.org/{e['type']}/{e['id']}",
-            "source_2": t.get("website") or t.get("contact:website") or "",
-            "notes": "",
+            "source_2": "",  # a primary source, recorded by hand once the row is verified
+            "notes": f"OSM lists website {website}" if website else "",
         })
     return pd.DataFrame(rows)
 
