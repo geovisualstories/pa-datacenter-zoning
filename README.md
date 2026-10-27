@@ -60,15 +60,27 @@ Ordinance research led by Valerie Holt (Principal Investigator, Lehigh Universit
 - **Setup:** MSD-LIVE serves the files from the record page (or its `msdlive` CLI), not a direct URL, so download the GeoPackage by hand into `data/raw/pnnl_datacenter_atlas/`. Without it the maps build without this layer.
 - **Caveats:** crowd-sourced, so coverage may be incomplete. There is no capacity (MW) field, so symbols are not size-scaled. Overlapping campus, building and point records are collapsed to one point per facility.
 
-**Inventory of operating data centers** (`python -m src.build_dc_inventory`): a research worksheet, not yet a map layer. **PeeringDB is used for discovery only. Published data comes from OpenStreetMap and primary sources.** No commercial directories are used. The script writes two files:
+**Inventory of operating data centers**: a research worksheet, not yet a map layer. **PeeringDB is used for discovery only. Published data comes from OpenStreetMap and primary sources.** No commercial directories are used.
+
+```bash
+python -m src.build_dc_inventory --fetch   # download PeeringDB + OpenStreetMap, add new facilities to the draft
+python -m src.build_dc_inventory           # offline: rebuild the public CSV from the draft (no network calls)
+```
+
+- `--fetch` caches the raw responses in `data/raw/dc_inventory/` and backs up the draft to `data/raw/dc_inventory/draft_backups/` before merging. Both folders are gitignored.
+- It **only appends** facilities not yet in the draft (matched on `source_1`). Existing rows are never rewritten. If a facility has dropped out of PeeringDB or OpenStreetMap, the merge adds "Not in source as of DATE" to its `notes`. Rows you add by hand with another source are left alone.
+- Overpass is often busy. The script retries with exponential backoff (15 s, 30 s, 60 s, 120 s), then tries alternate public Overpass servers. If they all fail, it uses the most recent cached response and prints a warning.
+- After editing the draft (marking `published_ok`, recording sources), run the command without `--fetch` to update the public file.
+
+The script works with two files:
 - `data/processed/pa_dc_inventory_draft.csv` is the working draft. It is **gitignored and never published** because it contains PeeringDB records.
   - Every row starts as "Needs check" with `published_ok` = False.
   - Rows from the two sources that look like the same facility (same name or operator within 500 m) are flagged in `notes`, not merged. Unnamed OpenStreetMap buildings that belong to one site are flagged the same way.
   - Municipality and county come from the Census boundaries above.
-  - Edits made by hand (`status`, `capacity_mw`, `mw_measure`, `source_2`, `date_checked`, `published_ok`, `notes`) are kept when the script is rerun.
+  - Edits made by hand (`status`, `capacity_mw`, `mw_measure`, `source_2`, `date_checked`, `published_ok`, `notes`, or any other column) are never overwritten.
 - `data/processed/pa_dc_inventory_public.csv` is the published file. It holds only rows with `published_ok` = True, with every PeeringDB link and note removed.
   - A row may be `published_ok` only if it comes from OpenStreetMap, or if it has been checked against a primary source recorded in `source_2` (operator website, PA DEP permit or news article).
-  - A PeeringDB listing on its own never qualifies. The script resets any row that breaks this rule to False.
+  - A PeeringDB listing on its own never qualifies. A row marked True that breaks this rule is left out of the public file and named in the output. The draft itself is not changed.
   - Any map layer built from the inventory must read this file only (`datacenters.load_inventory_public()`). `make_maps.py` stops with an error if `docs/index.html`, the GeoPackages or the SVG maps contain PeeringDB content.
 
 The two sources:
