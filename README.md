@@ -68,7 +68,10 @@ python -m src.build_dc_inventory           # offline: rebuild the public CSV fro
 ```
 
 - `--fetch` caches the raw responses in `data/raw/dc_inventory/` and backs up the draft to `data/raw/dc_inventory/draft_backups/` before merging. Both folders are gitignored.
-- It **only appends** facilities not yet in the draft (matched on `source_1`). Existing rows are never rewritten. If a facility has dropped out of PeeringDB or OpenStreetMap, the merge adds "Not in source as of DATE" to its `notes`. Rows you add by hand with another source are left alone.
+- It **only appends** facilities not yet in the draft (matched on `source_1`). Existing rows are never rewritten. Rows you add by hand with another source are left alone. If a facility has dropped out of PeeringDB or OpenStreetMap, the merge adds "Not in source as of DATE" to its `notes`, and then:
+  - If `source_2` holds a primary source (operator site, DEP permit, news), the row is unchanged and stays published.
+  - Otherwise, when its only evidence besides PeeringDB is OpenStreetMap, it goes back to status "Needs check" with `published_ok` False. This happens only on the run that first notices the drop, so a row you re-verify later keeps your setting.
+  - Every `--fetch` run ends with a list of all dropped rows and their current status.
 - Overpass is often busy. The script retries with exponential backoff (15 s, 30 s, 60 s, 120 s), then tries alternate public Overpass servers. If they all fail, it uses the most recent cached response and prints a warning.
 - After editing the draft (marking `published_ok`, recording sources), run the command without `--fetch` to update the public file.
 

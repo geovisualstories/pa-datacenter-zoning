@@ -240,9 +240,17 @@ def read_draft() -> pd.DataFrame:
     return df
 
 
+def has_primary_source(row) -> bool:
+    """source_2 holds evidence other than PeeringDB or OpenStreetMap (operator site, DEP permit, news)."""
+    s = str(row["source_2"]).strip()
+    return bool(s) and not is_peeringdb(s) and "openstreetmap.org" not in s
+
+
 def merge(fresh: pd.DataFrame) -> tuple[pd.DataFrame, int, int]:
     """Append facilities not yet in the draft; note draft rows that dropped out of their source.
-    Existing rows are otherwise left exactly as they are. -> (draft, n_added, n_newly_removed)."""
+    A newly dropped row with no primary source in source_2 goes back to status "Needs check",
+    published_ok False. Existing rows are otherwise left exactly as they are.
+    -> (draft, n_added, n_newly_removed)."""
     if not DRAFT.exists():
         return fresh, len(fresh), 0
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
@@ -257,7 +265,21 @@ def merge(fresh: pd.DataFrame) -> tuple[pd.DataFrame, int, int]:
     gone = from_source & ~old["source_1"].isin(fresh["source_1"]) & ~old["notes"].str.contains("Not in source as of")
     note = f"Not in source as of {dt.date.today().isoformat()}"
     old.loc[gone, "notes"] = [f"{n}; {note}" if n else note for n in old.loc[gone, "notes"]]
+    # Only on the run that first notices the drop, so a row re-verified by hand later stays as set.
+    unbacked = gone & ~old.apply(has_primary_source, axis=1)
+    old.loc[unbacked, ["status", "published_ok"]] = ["Needs check", "False"]
     return pd.concat([old, added], ignore_index=True), len(added), int(gone.sum())
+
+
+def print_dropped(draft: pd.DataFrame) -> None:
+    """Every draft row noted as no longer in its source, and whether it can still be published."""
+    dropped = draft[draft["notes"].str.contains("Not in source as of")]
+    print(f"\nRows no longer in their source: {len(dropped)}")
+    for _, r in dropped.iterrows():
+        when = re.search(r"Not in source as of (\S+)", r["notes"]).group(1)
+        state = ("kept published (primary source in source_2)" if has_primary_source(r) and _truthy(r["published_ok"])
+                 else f"status {r['status']!r}, published_ok {r['published_ok']}")
+        print(f"  {r['name'] or '(unnamed)'} | {r['source_1']} | dropped {when} | {state}")
 
 
 def is_peeringdb(s) -> bool:
@@ -304,6 +326,7 @@ def fetch() -> None:
     draft[COLUMNS].to_csv(DRAFT, index=False, encoding="utf-8-sig")
     print(f"Wrote {DRAFT.relative_to(config.ROOT)}: {len(draft)} rows "
           f"({added} new, {removed} newly noted as no longer in their source)")
+    print_dropped(draft)
 
 
 def write_public() -> None:
